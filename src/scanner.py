@@ -1,5 +1,6 @@
 import socket
 import threading
+from service_detection import detect_service
 
 PORTS = [20, 21, 22, 23, 25, 53, 80, 110, 143, 443, 445, 3389]
 
@@ -9,7 +10,8 @@ def scan_port(target, port):
             s.settimeout(1)
             result = s.connect_ex((target, port))
             if result == 0:
-                print(f"Port {port} is open on {target}")
+                service = detect_service(port)
+                print(f"Port {port} is open on {target} ({service})")
             else:
                 print(f"Port {port} is closed on {target}")
     except Exception as e:
